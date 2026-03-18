@@ -30,46 +30,46 @@
                     <!-- Buttons will be injected here by JS -->
                 </div>
             </div>
-        </main>
+    </div>
 
-        <!-- Detail Fullscreen View -->
-        <main class="detail-fullscreen hidden" id="detailView">
-            <div class="detail-container">
-                <button class="back-button" id="backButton">
-                    <i class="fas fa-arrow-left"></i> กลับหน้าหลัก
-                </button>
-                
-                <div class="detail-content-wrapper fade-in">
-                    <div class="detail-header-full">
-                        <div class="title-group">
-                            <span class="detail-number" id="detailNumber">1</span>
-                            <div class="title-texts">
-                                <h2 id="detailTitle">ชื่ออุปกรณ์</h2>
-                                <h3 class="detail-subtitle" id="detailEngName">English Name</h3>
-                            </div>
+    <!-- Detail Fullscreen View (Moved outside app-container for true fixed positioning) -->
+    <main class="detail-fullscreen hidden" id="detailView">
+        <div class="detail-container">
+            <button class="back-button" id="backButton">
+                <i class="fas fa-arrow-left"></i> กลับหน้าหลัก
+            </button>
+            
+            <div class="detail-content-wrapper fade-in">
+                <div class="detail-header-full">
+                    <div class="title-group">
+                        <span class="detail-number" id="detailNumber">1</span>
+                        <div class="title-texts">
+                            <h2 id="detailTitle">ชื่ออุปกรณ์</h2>
+                            <h3 class="detail-subtitle" id="detailEngName">English Name</h3>
                         </div>
                     </div>
+                </div>
+                
+                <div class="detail-body-full">
+                    <div class="text-section">
+                        <h4 class="section-title">ข้อมูลอุปกรณ์</h4>
+                        <p class="detail-description" id="detailDesc">คำอธิบายอุปกรณ์จะแสดงที่นี่</p>
+                    </div>
                     
-                    <div class="detail-body-full">
-                        <div class="text-section">
-                            <h4 class="section-title">ข้อมูลอุปกรณ์</h4>
-                            <p class="detail-description" id="detailDesc">คำอธิบายอุปกรณ์จะแสดงที่นี่</p>
-                        </div>
-                        
-                        <!-- Video Container -->
-                        <div class="video-section">
-                            <div class="video-container hidden" id="videoContainer">
-                                <video id="detailVideo" controls playsinline>
-                                    <source src="" type="video/mp4">
-                                    Browser ของคุณไม่รองรับการแสดงผลวิดีโอ
-                                </video>
-                            </div>
+                    <!-- Video Container -->
+                    <div class="video-section">
+                        <div class="video-container hidden" id="videoContainer">
+                            <video id="detailVideo" controls playsinline>
+                                <source src="" type="video/mp4">
+                                Browser ของคุณไม่รองรับการแสดงผลวิดีโอ
+                            </video>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+
     <script src="script.js"></script>
 </body>
 </html>

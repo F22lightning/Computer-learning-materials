@@ -134,19 +134,29 @@ document.addEventListener('DOMContentLoaded', () => {
         detailEngName.innerText = comp.english;
         detailDesc.innerText = comp.description;
         
-        // Handle Video Display
+        // --- Trigger Native Video Fullscreen ---
         if (comp.videoUrl) {
-            // Load and show video
             detailVideo.src = comp.videoUrl;
             detailVideo.load();
             videoContainer.classList.remove('hidden');
-            detailVideo.play().catch(e => console.log("Auto-play prevented", e));
+            
+            // Wait for video metadata to be ready or just try it (needs user gesture which we have)
+            detailVideo.play().then(() => {
+                if (detailVideo.requestFullscreen) {
+                    detailVideo.requestFullscreen();
+                } else if (detailVideo.webkitRequestFullscreen) {
+                    detailVideo.webkitRequestFullscreen();
+                } else if (detailVideo.msRequestFullscreen) {
+                    detailVideo.msRequestFullscreen();
+                }
+            }).catch(e => console.log("Auto-play/Fullscreen prevented", e));
         } else {
             // Hide video container if no video available
             videoContainer.classList.add('hidden');
             detailVideo.pause();
             detailVideo.src = "";
         }
+        // ----------------------------------------
         
         // Trigger animation
         detailWrapper.classList.add('fade-in');
