@@ -46,15 +46,21 @@ const components = [
         description: "อุปกรณ์แสดงผลชนิดหนึ่ง ทำหน้าที่แปลงสัญญาณไฟฟ้าให้กลายเป็นเสียง (Output) เพื่อให้ผู้ใช้งานได้ยินเสียงเพลง เสียงจากภาพยนตร์ หรือคลื่นเสียงต่างๆ จากคอมพิวเตอร์",
         label: "Speaker",
         videoUrl: "ลำโพง.mp4"
+    },
+    {
+        id: 7,
+        title: "โซลิดสเตตไดรฟ์ (SSD)",
+        english: "Solid State Drive (SSD)",
+        description: "อุปกรณ์จัดเก็บข้อมูลแบบถาวรที่พัฒนาต่อจากฮาร์ดดิสก์ (HDD) โดยใช้ชิปหน่วยความจำแฟลช (Flash Memory) ในการบันทึกข้อมูล ทำให้มีความเร็วในการอ่านและเขียนข้อมูลสูงกว่า น้ำหนักเบา และทนทานต่อแรงกระแทกได้ดีกว่ามาก",
+        label: "SSD",
+        videoUrl: "ssd.mp4" // ไฟล์วิดีโอ SSD
     }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
     const buttonsGrid = document.getElementById('buttonsGrid');
     
-    // Sidebar elements
-    const emptyState = document.getElementById('emptyState');
-    const detailContent = document.getElementById('detailContent');
+    // Elements
     const detailNumber = document.getElementById('detailNumber');
     const detailTitle = document.getElementById('detailTitle');
     const detailEngName = document.getElementById('detailEngName');
@@ -64,17 +70,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoContainer = document.getElementById('videoContainer');
     const detailVideo = document.getElementById('detailVideo');
 
+    // Views
     const homeView = document.getElementById('homeView');
     const detailView = document.getElementById('detailView');
     const backButton = document.getElementById('backButton');
     
     let activeButton = null;
+    let currentIndex = -1; // Keep track of current item index
 
     // Build the buttons grid
     function initButtons() {
         buttonsGrid.innerHTML = ''; // Clear previous if any
         
-        components.forEach(comp => {
+        components.forEach((comp, index) => {
             const btn = document.createElement('button');
             btn.className = 'number-btn';
             
@@ -85,22 +93,31 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             
             btn.addEventListener('click', () => {
-                showDetail(comp, btn);
+                showDetail(index);
             });
             
             buttonsGrid.appendChild(btn);
         });
     }
 
-    function showDetail(comp, btnElement) {
-        // Handle active states on buttons
+    // Function to handle showing the details view based on array index
+    function showDetail(index) {
+        if (index < 0 || index >= components.length) return;
+        
+        const comp = components[index];
+        currentIndex = index;
+
+        // Visual update on Home Buttons if needed
         if (activeButton) {
             activeButton.classList.remove('active');
         }
-        btnElement.classList.add('active');
-        activeButton = btnElement;
+        const targetBtn = buttonsGrid.children[index];
+        if (targetBtn) {
+            targetBtn.classList.add('active');
+            activeButton = targetBtn;
+        }
 
-        // Switch Views
+        // Switch Views (if not already opened)
         homeView.classList.add('hidden');
         detailView.classList.remove('hidden');
         
@@ -135,8 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
         detailWrapper.classList.add('fade-in');
     }
 
-    // Handle Back Button
-    backButton.addEventListener('click', () => {
+    // Function to go back Home
+    function goHome() {
         // Stop video
         detailVideo.pause();
         detailVideo.src = "";
@@ -145,13 +162,64 @@ document.addEventListener('DOMContentLoaded', () => {
         detailView.classList.add('hidden');
         homeView.classList.remove('hidden');
         
-        // Clear active button state
+        // Clear state
         if (activeButton) {
             activeButton.classList.remove('active');
             activeButton = null;
         }
+        currentIndex = -1;
+    }
+
+    // Handle Back Button Click
+    backButton.addEventListener('click', goHome);
+
+    // KEYBOARD NAVIGATION (Numpad / Keyboard Shortcuts)
+    document.addEventListener('keydown', (e) => {
+        const key = e.key;
+
+        // 1. Direct number picking (1-7)
+        if (key >= '1' && key <= '7') {
+            const num = parseInt(key);
+            // Example: "1" pressed, ID = 1, Index = 0
+            const compIndex = components.findIndex(c => c.id === num);
+            if (compIndex !== -1) {
+                showDetail(compIndex);
+            }
+        }
+        // 2. Play/Pause toggle (*0*)
+        else if (key === '0') {
+            if (currentIndex !== -1 && components[currentIndex].videoUrl) {
+                if (detailVideo.paused) {
+                    detailVideo.play();
+                } else {
+                    detailVideo.pause();
+                }
+            }
+        }
+        // 3. Next Component (*+*)
+        else if (key === '+') {
+            let nextIndex = currentIndex + 1;
+            // Wrap around
+            if (nextIndex >= components.length) {
+                nextIndex = 0;
+            }
+            showDetail(nextIndex);
+        }
+        // 4. Previous Component (*-*)
+        else if (key === '-') {
+            let prevIndex = currentIndex - 1;
+            // Wrap around
+            if (prevIndex < 0) {
+                prevIndex = components.length - 1;
+            }
+            showDetail(prevIndex);
+        }
+        // 5. Back to Home (*x* or *** depending on numpad, standard uses *)
+        else if (key === '*') {
+            goHome();
+        }
     });
 
-    // Initialize the grid layout straight away
+    // Initialize HTML grid
     initButtons();
 });
