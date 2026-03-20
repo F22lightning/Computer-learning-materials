@@ -134,29 +134,21 @@ document.addEventListener('DOMContentLoaded', () => {
         detailEngName.innerText = comp.english;
         detailDesc.innerText = comp.description;
         
-        // --- Trigger Native Video Fullscreen ---
+        // --- Handle Video Playback (No Auto-Fullscreen) ---
         if (comp.videoUrl) {
             detailVideo.src = comp.videoUrl;
             detailVideo.load();
             videoContainer.classList.remove('hidden');
             
-            // Wait for video metadata to be ready or just try it (needs user gesture which we have)
-            detailVideo.play().then(() => {
-                if (detailVideo.requestFullscreen) {
-                    detailVideo.requestFullscreen();
-                } else if (detailVideo.webkitRequestFullscreen) {
-                    detailVideo.webkitRequestFullscreen();
-                } else if (detailVideo.msRequestFullscreen) {
-                    detailVideo.msRequestFullscreen();
-                }
-            }).catch(e => console.log("Auto-play/Fullscreen prevented", e));
+            // Play video in the overlay automatically, but DON'T request native fullscreen yet
+            detailVideo.play().catch(e => console.log("Auto-play prevented", e));
         } else {
             // Hide video container if no video available
             videoContainer.classList.add('hidden');
             detailVideo.pause();
             detailVideo.src = "";
         }
-        // ----------------------------------------
+        // --------------------------------------------------
         
         // Trigger animation
         detailWrapper.classList.add('fade-in');
@@ -190,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Direct number picking (1-7)
         if (key >= '1' && key <= '7') {
             const num = parseInt(key);
-            // Example: "1" pressed, ID = 1, Index = 0
             const compIndex = components.findIndex(c => c.id === num);
             if (compIndex !== -1) {
                 showDetail(compIndex);
@@ -209,31 +200,35 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Next Component (*+*)
         else if (key === '+') {
             let nextIndex = currentIndex + 1;
-            // Wrap around
-            if (nextIndex >= components.length) {
-                nextIndex = 0;
-            }
+            if (nextIndex >= components.length) nextIndex = 0;
             showDetail(nextIndex);
         }
         // 4. Previous Component (*-*)
         else if (key === '-') {
             let prevIndex = currentIndex - 1;
-            // Wrap around
-            if (prevIndex < 0) {
-                prevIndex = components.length - 1;
-            }
+            if (prevIndex < 0) prevIndex = components.length - 1;
             showDetail(prevIndex);
         }
-        // 5. Back to Home (*x* or *** depending on numpad, standard uses *)
+        // 5. Back to Home (*)
         else if (key === '*') {
             goHome();
         }
-        // 6. Exit Fullscreen (9) 
+        // 6. Manual Video Fullscreen (8) 
+        else if (key === '8') {
+            if (currentIndex !== -1 && components[currentIndex].videoUrl) {
+                if (detailVideo.requestFullscreen) {
+                    detailVideo.requestFullscreen();
+                } else if (detailVideo.webkitRequestFullscreen) {
+                    detailVideo.webkitRequestFullscreen();
+                }
+            }
+        }
+        // 7. Exit Fullscreen / Back to Home (9) 
         else if (key === '9') {
             if (document.fullscreenElement) {
-                document.exitFullscreen().catch(err => {
-                    console.log(`Error attempting to exit full-screen mode: ${err.message}`);
-                });
+                document.exitFullscreen().catch(() => {});
+            } else {
+                goHome();
             }
         }
     });
