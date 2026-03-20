@@ -228,6 +228,14 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (key === '*') {
             goHome();
         }
+        // 6. Exit Fullscreen (/) 
+        else if (key === '/') {
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => {
+                    console.log(`Error attempting to exit full-screen mode: ${err.message}`);
+                });
+            }
+        }
     });
 
     // Initialize HTML grid
