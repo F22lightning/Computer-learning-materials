@@ -190,12 +190,13 @@ body {
     bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: #000;
-    background-image: radial-gradient(at 50% 50%, rgba(15, 23, 42, 1), rgba(0, 0, 0, 1));
+    background: rgba(15, 23, 42, 0.9); /* Semi-transparent */
+    backdrop-filter: blur(12px); /* Glass effect to see background slightly */
+    -webkit-backdrop-filter: blur(12px);
     z-index: 10000;
     display: flex;
     flex-direction: column;
-    padding: 2rem 3rem; /* Slightly reduced horizontal padding for better content space */
+    padding: 3rem 10%; /* More horizontal space to feel like a centered panel */
     overflow-y: auto;
 }
 

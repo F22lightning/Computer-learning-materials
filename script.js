@@ -58,6 +58,7 @@ const components = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("v2.2: Auto-fullscreen disabled. Use '8' for manual fullscreen.");
     const buttonsGrid = document.getElementById('buttonsGrid');
     
     // Elements
