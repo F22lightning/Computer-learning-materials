@@ -5,7 +5,7 @@ const components = [
         english: "Hard Disk Drive (HDD)",
         description: "อุปกรณ์กักเก็บข้อมูลหลักของคอมพิวเตอร์ ที่ใช้ในการเก็บระบบปฏิบัติการ โปรแกรม และบันทึกไฟล์ข้อมูลต่างๆ แบบถาวรแม้ขณะปิดเครื่อง ลักษณะในภาพเป็นฮาร์ดดิสก์แบบจานหมุน (Mechanical Hard Drive)",
         label: "HDD",
-        videoUrl: "ฮาร์ดดิสก์_Hard_Disk_Drive_.mp4"
+        videoUrl: "hdd_new.mp4"
     },
     {
         id: 2,
