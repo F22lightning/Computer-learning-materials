@@ -228,8 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (key === '*') {
             goHome();
         }
-        // 6. Exit Fullscreen (/) 
-        else if (key === '/') {
+        // 6. Exit Fullscreen (9) 
+        else if (key === '9') {
             if (document.fullscreenElement) {
                 document.exitFullscreen().catch(err => {
                     console.log(`Error attempting to exit full-screen mode: ${err.message}`);
